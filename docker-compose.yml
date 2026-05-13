@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  orchestrator:
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+    depends_on:
+      - critic_agent
+
+  critic_agent:
+    build: .
+    command: node dist/critic_agent/server.js
+    ports:
+      - "8002:8002"

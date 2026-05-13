@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "outDir": "./dist",
+        "rootDir": "./",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "verbatimModuleSyntax": false,
+        "resolveJsonModule": true // INDISPENSABLE para leer templates.json
+    },
+    "include": [
+        "shared/**/*.ts",
+        "general_agent/**/*.ts",
+        "healthcare_agent/**/*.ts",
+        "orchestrator/**/*.ts",
+        "critic_agent/**/*.ts",  // NUEVO
+        "empathy_agent/**/*.ts"   // NUEVO
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
