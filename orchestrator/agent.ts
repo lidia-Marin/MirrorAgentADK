@@ -1,26 +1,46 @@
-import '../shared/env.js';
-import { LlmAgent, AgentTool } from '@google/adk';
-import { criticAgent } from '../critic_agent/agent.js';
-import { empathyAgent } from '../empathy_agent/agent.js'; // Importamos empatía
+import axios from 'axios';
 
-// Herramientas para delegar tareas
-const criticTool = new AgentTool({ agent: criticAgent });
-const empathyTool = new AgentTool({ agent: empathyAgent });
+export async function mirrorAgent(message: string): Promise<string> {
+  try {
+    console.log('--- Orquestando llamada distribuida a Micro-Agentes ---');
 
-export const mirrorAgent = new LlmAgent({
-  name: 'Agente Espejo Financiero',
-  description: 'Sistema Multi-Agente enfocado en viabilidad económica y estrategia de negocio.',
-  model: 'gemini-1.5-flash', // CAMBIO: De azure-openai a gemini
-  instruction: `
-    ERES EL AGENTE VIRTUAL ESPEJO (AVE) FINANCIERO.
-    TU OBJETIVO ES ANALIZAR LA LÓGICA DE NEGOCIO Y LA RENTABILIDAD.
+    // 1. Consultamos al Agente Empático (Puerto 8003)
+    const empathyResponse = await axios.post('http://localhost:8003', { message });
+    
+    // Desempaquetamos la respuesta del ADK de forma ultra-segura
+    let empathy = '';
+    if (empathyResponse.data && typeof empathyResponse.data === 'object') {
+      empathy = empathyResponse.data.reply || empathyResponse.data.response || JSON.stringify(empathyResponse.data);
+    } else {
+      empathy = empathyResponse.data;
+    }
 
-    TU FLUJO DE TRABAJO ES:
-    1. VACIADO EMOCIONAL: Llama al 'AgenteEmpatia' para que el usuario suelte sus preocupaciones.
-    2. REFLEJO DE VALOR: Resume la intención financiera: "Lo que escucho es que buscas maximizar [X] asumiendo un riesgo de [Y]".
-    3. ANÁLISIS CRÍTICO: Llama al 'AbogadoDelDiabloFinanciero' para cuestionar el flujo de caja (Cash Flow) y el ROI.
-    4. DETECCIÓN DE SESGOS: Alerta sobre la falacia de costo hundido o exceso de confianza.
-    5. PREGUNTA SOCRÁTICA: Haz una pregunta incómoda sobre qué pasaría si el mercado cae un 20%.
-  `,
-  tools: [empathyTool, criticTool], // Ahora tienes ambas herramientas
-});
+    // 2. Consultamos al Agente Crítico (Puerto 8002)
+    const criticResponse = await axios.post('http://localhost:8002', { message });
+    
+    // Desempaquetamos la respuesta del ADK de forma ultra-segura
+    let critic = '';
+    if (criticResponse.data && typeof criticResponse.data === 'object') {
+      critic = criticResponse.data.reply || criticResponse.data.response || JSON.stringify(criticResponse.data);
+    } else {
+      critic = criticResponse.data;
+    }
+
+    // 3. Fusión cognitiva del Espejo
+    return `
+🧠 [Dimensión Empática]
+${empathy}
+
+👿 [Dimensión Crítica Financiera]
+${critic}
+`;
+
+  } catch (error: any) {
+    // Esto nos dirá exactamente en la consola qué puerto falló y por qué (ej. Connection Refused)
+    console.error('❌ Error detallado de red interna:', error.message);
+    if (error.response) {
+      console.error('Respuesta del nodo dañado:', error.response.data);
+    }
+    throw new Error('El sistema distribuido de agentes no pudo completar el análisis.');
+  }
+}

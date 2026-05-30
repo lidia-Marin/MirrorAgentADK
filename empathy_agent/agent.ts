@@ -1,12 +1,15 @@
-import { LlmAgent } from '@google/adk';
+import { askAI } from '../shared/ai.js';
 
-export const empathyAgent = new LlmAgent({
-  name: 'AgenteEmpatia',
-  model: 'gemini-1.5-flash', 
-  instruction: `
-    Tu única misión es escuchar al emprendedor. 
-    - Usa frases como "Te escucho", "Entiendo que esto es importante para ti".
-    - No juzgues la idea todavía. 
-    - Tu objetivo es que el usuario suelte todas sus preocupaciones (Vaciado).
-  `
-});
+export async function empathyAgent(message: string) {
+  const prompt = `
+Eres el componente de Soporte Empático de MirrorAgent AI.
+Tu objetivo es escuchar al emprendedor, validar sus emociones frente al estrés del negocio, la incertidumbre o el éxito, y ofrecer palabras de aliento profesionales pero cálidas.
+
+El usuario expresó:
+"${message}"
+
+Responde con empatía, comprensión y optimismo motivador. Mantén la respuesta concisa.
+`;
+
+  return await askAI(prompt);
+}

@@ -1,0 +1,235 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-100 to-cyan-100 flex">
+
+  <!-- SIDEBAR -->
+  <div class="w-64 bg-white shadow-2xl p-6">
+
+    <h1 class="text-3xl font-bold text-cyan-600 mb-10">
+      MirrorAgent
+    </h1>
+
+    <nav class="flex flex-col gap-4">
+
+      <a
+        routerLink="/dashboard"
+        class="bg-white border border-cyan-500 text-cyan-600 p-3 rounded-xl text-center font-semibold"
+      >
+        Dashboard
+      </a>
+
+      <a
+        routerLink="/sales"
+        class="bg-cyan-500 text-white p-3 rounded-xl text-center font-semibold"
+      >
+        Ventas
+      </a>
+
+      <a
+        routerLink="/chat"
+        class="bg-white border border-cyan-500 text-cyan-600 p-3 rounded-xl text-center font-semibold"
+      >
+        Chat IA
+      </a>
+
+      <a
+        routerLink="/"
+        class="bg-red-500 text-white p-3 rounded-xl text-center font-semibold"
+      >
+        Cerrar sesión
+      </a>
+
+    </nav>
+
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="flex-1 p-10">
+
+  <div class="max-w-7xl mx-auto">
+
+    <h1 class="text-5xl font-bold text-cyan-600 mb-10">
+      Gestión de Ventas 💰
+    </h1>
+
+    <!-- ESTADÍSTICAS -->
+    <div class="grid grid-cols-2 gap-6 mb-10">
+
+      <div class="bg-white p-8 rounded-3xl shadow-xl">
+
+        <h2 class="text-xl font-bold text-gray-700">
+          Total vendido
+        </h2>
+
+        <p class="text-4xl font-bold text-cyan-500 mt-4">
+          $ {{ getTotalSales() }}
+        </p>
+
+      </div>
+
+      <div class="bg-white p-8 rounded-3xl shadow-xl">
+
+        <h2 class="text-xl font-bold text-gray-700">
+          Ventas registradas
+        </h2>
+
+        <p class="text-4xl font-bold text-indigo-500 mt-4">
+          {{ getTotalProducts() }}
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="bg-white p-8 rounded-3xl shadow-xl mb-10">
+
+      <div class="grid grid-cols-2 gap-4">
+
+        <!-- CLIENTE -->
+        <div>
+          <label class="block mb-2 font-semibold text-gray-700">
+            Cliente
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="customer"
+            placeholder="Nombre cliente"
+            class="w-full p-4 rounded-2xl border"
+          >
+        </div>
+
+        <!-- PRODUCTO -->
+        <div>
+          <label class="block mb-2 font-semibold text-gray-700">
+            Producto
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="product"
+            placeholder="Producto"
+            class="w-full p-4 rounded-2xl border"
+          >
+        </div>
+
+        <!-- CATEGORÍA -->
+        <div>
+          <label class="block mb-2 font-semibold text-gray-700">
+            Categoría
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="category"
+            placeholder="Tecnología"
+            class="w-full p-4 rounded-2xl border"
+          >
+        </div>
+
+        <!-- PRECIO -->
+        <div>
+          <label class="block mb-2 font-semibold text-gray-700">
+            Precio
+          </label>
+
+          <input
+            type="number"
+            [(ngModel)]="price"
+            placeholder="50000"
+            class="w-full p-4 rounded-2xl border"
+          >
+        </div>
+
+        <!-- CANTIDAD -->
+        <div>
+          <label class="block mb-2 font-semibold text-gray-700">
+            Cantidad
+          </label>
+
+          <input
+            type="number"
+            [(ngModel)]="quantity"
+            placeholder="2"
+            class="w-full p-4 rounded-2xl border"
+          >
+        </div>
+
+      </div>
+
+      <!-- BOTÓN -->
+      <button
+        (click)="addSale()"
+        class="mt-6 bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-4 rounded-2xl font-bold"
+      >
+        Registrar venta
+      </button>
+
+    </div>
+
+    <!-- TABLA -->
+    <div class="bg-white p-8 rounded-3xl shadow-xl">
+
+      <h2 class="text-3xl font-bold mb-6">
+        Ventas registradas
+      </h2>
+
+      <table class="w-full">
+
+        <thead>
+
+          <tr class="border-b text-left">
+
+            <th class="p-4">Cliente</th>
+            <th class="p-4">Producto</th>
+            <th class="p-4">Categoría</th>
+            <th class="p-4">Precio</th>
+            <th class="p-4">Cantidad</th>
+            <th class="p-4">Total</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="let sale of sales"
+            class="border-b"
+          >
+
+            <td class="p-4">
+              {{ sale.customer }}
+            </td>
+
+            <td class="p-4">
+              {{ sale.product }}
+            </td>
+
+            <td class="p-4">
+              {{ sale.category }}
+            </td>
+
+            <td class="p-4">
+              $ {{ sale.price }}
+            </td>
+
+            <td class="p-4">
+              {{ sale.quantity }}
+            </td>
+
+            <td class="p-4 font-bold text-cyan-600">
+              $ {{ sale.total }}
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+  </div>
+
+</div>

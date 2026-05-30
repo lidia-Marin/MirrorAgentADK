@@ -1,17 +1,15 @@
-import '../shared/env.js';
-import { LlmAgent } from '@google/adk';
-import { financialSimulator } from './tools.js'; // Asegúrate de que el archivo exista
-import { readFileSync } from 'fs';
+import { askAI } from '../shared/ai.js';
 
-// Esta sintaxis requiere que el tsconfig esté en NodeNext
-const templates = JSON.parse(
-    readFileSync(new URL('../data/templates.json', import.meta.url), 'utf-8')
-);
+export async function criticAgent(message: string) {
+  const prompt = `
+Eres un crítico financiero experto de MirrorAgent AI.
+Analiza los riesgos financieros del siguiente negocio:
 
-export const criticAgent = new LlmAgent({
-    name: 'AbogadoDelDiabloFinanciero',
-    model: 'gemini-1.5-flash',
-    description: 'Agente crítico de viabilidad económica.',
-    instruction: `Eres un auditor financiero. Criterio: ${templates.financial_check}`,
-    tools: [financialSimulator],
-});
+${message}
+
+Nota: Tienes a tu disposición una herramienta para generar escenarios financieros (inversión y burn rate). Si el usuario proporciona estos datos numéricos, utilízalos para dar un diagnóstico exacto.
+Sé directo y profesional.
+`;
+
+  return await askAI(prompt);
+}
